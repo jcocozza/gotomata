@@ -10,7 +10,7 @@ import (
 var gray = color.Gray{Y: 150}
 var white = color.Gray{Y: 225}
 
-func CreateImage(width, height int, data [][]bool) *image.Gray {
+func CreateImage(width, height int, filepath string, data [][]bool) *image.Gray {
 	
 	height = len(data)
 	width = len(data[0])
@@ -30,7 +30,7 @@ func CreateImage(width, height int, data [][]bool) *image.Gray {
 	}
 
 	// Create a new PNG file to save the image
-	file, err := os.Create("output.png")
+	file, err := os.Create(filepath)
 	if err != nil {
 		panic(err)
 	}

@@ -47,9 +47,6 @@ func (eca *ElementaryCellularAutomata) Step() *ElementaryCellularAutomata {
         rule := eca.RuleSet.GetRule(neighborhood)
         result := rule(neighborhood)
         grid.SetValue(i, result)
-
-        //fmt.Println(fmt.Sprint(neighborhood) + "->" + fmt.Sprint(result))
-
     }    
     return NewECAFromGrid(eca.RuleSet.ruleNumber, eca.Length, grid) 
 }

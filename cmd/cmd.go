@@ -13,3 +13,9 @@ func Printrow(row []bool) {
     }
     fmt.Println(rowstr)
 }
+
+func PrintRows(rows [][]bool) {
+    for _, row := range rows {
+        Printrow(row)
+    } 
+}

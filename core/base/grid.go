@@ -7,12 +7,17 @@ type Grid[T any] struct {
 	Data       []T
 }
 
+// Create a new grid
+//
+// sizes are a list of ints specifing the number of cells in a given direction
+//
+// e.g. size = []int{50,50} will be a 50 x 50 grid
 func NewGrid[T any](sizes []int) *Grid[T] {
 	dimensions := len(sizes)
-
-	totalCells := 0
+		
+	totalCells := 1 
 	for _, size := range sizes {
-		totalCells += size
+		totalCells *= size
 	}
 	data := make([]T, totalCells)
 
@@ -28,11 +33,24 @@ func NewGrid[T any](sizes []int) *Grid[T] {
 func (g *Grid[T]) Index(cellLocation CellLocation) int {
 	index := 0
 	stride := 1
-	for i := len(g.Sizes) - 1; i >= 0; i-- {
+	for i := g.Dimensions - 1; i >= 0; i-- {
 		index += cellLocation[i] * stride
 		stride *= g.Sizes[i]
 	}
 	return index
+}
+
+// Coords calculates the coordinates in the n-dimensional grid for a given linear index
+func (g *Grid[T]) Coords(index int) []int {
+	coords := make([]int, g.Dimensions)
+
+	for i := g.Dimensions - 1; i >= 0; i-- {
+		coords[i] = index % g.Sizes[i]
+		index /= g.Sizes[i]
+	}
+	
+
+	return coords
 }
 
 func (g *Grid[T]) GetValue(idx int) T {
@@ -40,5 +58,10 @@ func (g *Grid[T]) GetValue(idx int) T {
 }
 
 func (g *Grid[T]) SetValue(idx int, value T) {
-	g.Data[idx] = value 
+	g.Data[idx] = value
+}
+
+func (g *Grid[T]) SetValueByCoord(value T, coord CellLocation) {
+	idx := g.Index(coord)
+	g.Data[idx] = value
 }
