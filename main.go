@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jcocozza/gotomata/cmd"
 	"github.com/jcocozza/gotomata/core/elementary"
 	"github.com/jcocozza/gotomata/visualize"
 )
@@ -8,20 +9,21 @@ import (
 
 func main() {
 
-    gLen := 500
-    gWidth := 500
+    eca := elementary.NewECA(30,200)
+    eca.Grid.SetValue(100, true)
 
-    initLayer := make([]bool, gWidth) 
-    for i := 0; i < gWidth; i++ {
-        if i == gWidth - 2 {
-            initLayer[i] = true 
-        } else {
-            initLayer[i] = false
-        }
+    cmd.Printrow(eca.Grid.Data)
+    var next *elementary.ElementaryCellularAutomata
+    next = eca
+
+    data := [][]bool{}
+    data = append(data, next.Grid.Data)
+
+    for i := 0; i < 50; i++ {
+        next = next.Step()
+        data = append(data, next.Grid.Data)
+        cmd.Printrow(next.Grid.Data)
     }
-
-    cells := elementary.NewElementaryCellularAutomata(184, initLayer, gLen, gWidth)
-    cells.Run(initLayer)
 
     /*
     for _, row := range cells.Cells {
@@ -29,5 +31,5 @@ func main() {
     }
     */
 
-    visualize.CreateImage(400,300, cells.Cells)
+    visualize.CreateImage(400, 300, data)
 }

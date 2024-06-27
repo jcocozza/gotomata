@@ -1,4 +1,4 @@
-package base 
+package base
 
-// returns a list of all of the neighborhoods for a given layer
-type Neighborhoods[T any] func(layer int) [][]T
+// A neighborhood is a list of cells around a cell
+type Neighborhood[T any] []T

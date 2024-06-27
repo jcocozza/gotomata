@@ -1,10 +1,9 @@
-package base 
+package base
 
-// a rule determines what a neighborhood maps to
-type Rule[T any] func(neighborhood []T) T
+// A rule takes a neighborhood to a state
+type Rule[T any] func(neighborhood Neighborhood[T]) T 
 
-// Every list of rules must have a way of producing which rule to use based on the passed neighborhood
+// A rule set is a list of rules governing the next state based on a neighborhood
 type RuleSet[T any] interface {
-    GetRule(neighborhood []T) Rule[T]
+    GetRule(neighborhood Neighborhood[T]) Rule[T]
 }
-

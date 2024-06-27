@@ -2,13 +2,13 @@ package cmd
 
 import "fmt"
 
-func printrow(row []bool) {
+func Printrow(row []bool) {
     rowstr := ""
     for _, elm := range row {
        if elm {
-        rowstr += "1"
+        rowstr += "█"
        } else {
-        rowstr += "0"
+        rowstr += "░"
        } 
     }
     fmt.Println(rowstr)
