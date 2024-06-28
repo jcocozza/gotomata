@@ -1,17 +1,17 @@
 package visualize
 
 import (
-    "os"
-    "image/png"
 	"image"
 	"image/color"
+	"image/png"
+	"os"
 )
 
 var gray = color.Gray{Y: 150}
 var white = color.Gray{Y: 225}
 
 func CreateImage(width, height int, filepath string, data [][]bool) *image.Gray {
-	
+
 	height = len(data)
 	width = len(data[0])
 

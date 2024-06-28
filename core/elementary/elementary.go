@@ -50,3 +50,17 @@ func (eca *ElementaryCellularAutomata) Step() *ElementaryCellularAutomata {
     }    
     return NewECAFromGrid(eca.RuleSet.ruleNumber, eca.Length, grid) 
 }
+
+func (eca *ElementaryCellularAutomata) Run(iterations int) [][]bool {
+    data := make([][]bool, iterations)
+    for i := range data {
+        data[i] = make([]bool, eca.Length)
+    }
+    var next *ElementaryCellularAutomata
+    next = eca
+    for i := 0; i < iterations; i++ {
+        next = next.Step() 
+        data[i] = next.Grid.Data
+    } 
+    return data
+} 

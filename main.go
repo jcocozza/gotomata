@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/jcocozza/gotomata/cmd"
+//	"github.com/jcocozza/gotomata/cmd"
 	"github.com/jcocozza/gotomata/core/conway"
 	"github.com/jcocozza/gotomata/core/elementary"
 	"github.com/jcocozza/gotomata/visualize"
 )
-
+/*
 func elementaryMain() {
     rule := 30
     eca := elementary.NewECA(uint8(rule),200)
@@ -27,13 +27,19 @@ func elementaryMain() {
         cmd.Printrow(next.Grid.Data)
     }
 
-    /*
-    for _, row := range cells.Cells {
-        printrow(row)
-    }
-    */
-
     visualize.CreateImage(400, 300,fmt.Sprintf("rule%d.png",rule), data)
+}
+*/
+func elementaryMain(rule uint8) {
+    width := 1000 
+    eca := elementary.NewECA(rule, width)
+
+    // initialize the center of the first row to true
+    eca.Grid.SetValue(500, true)
+
+    data := eca.Run(600)
+//    cmd.PrintRows(data)
+    visualize.CreateImage(800, 800,fmt.Sprintf("images/elementary/rule%d.png",rule), data)
 }
 
 func conwayMain() {
@@ -56,5 +62,13 @@ func conwayMain() {
 }
 
 func main() {
-    conwayMain()
+//    conwayMain()
+//    elementaryMain(30)
+
+/*
+    for i := 1; i <= 255; i++ {
+        print(fmt.Sprintf("running rule %d\n", i))
+        elementaryMain(uint8(i)) 
+    }
+*/
 }

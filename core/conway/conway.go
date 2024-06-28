@@ -61,26 +61,6 @@ func (gol *GameOfLife) Step() *GameOfLife {
 	}
 	return NewGOLFromGrid(gol.Width, gol.Height, grid)
 }
-/*
-func (gol *GameOfLife) ToRows() [][]bool {
-	rowLst := make([][]bool, gol.Height+1)
-
-	counter := 0
-	heightIdx := 0
-	row := make([]bool, gol.Width)
-	for _, cell := range gol.Grid.Data {
-		row[counter] = cell
-		if counter == gol.Width-1 {
-			rowLst[heightIdx] = row
-			counter = 0
-			heightIdx += 1
-			row = make([]bool, gol.Width)
-		}
-		counter += 1
-	}
-	return rowLst
-}
-*/
 
 func (gol *GameOfLife) ToRows() [][]bool {
 	rowLst := make([][]bool, gol.Height)
