@@ -1,18 +1,28 @@
 package core
 
 import (
-	"fmt"
 	"hash/fnv"
+	"strconv"
 )
 
 // an n-dimensional coordinate on the grid
 type Coordinate []int
 
+/*
 func (c Coordinate) hash() uint32 {
 	hasher := fnv.New32a()
 	for _, num := range c {
 		bytes := []byte(fmt.Sprintf("%d", num))
 		hasher.Write(bytes)
+	}
+	return hasher.Sum32()
+}
+*/
+
+func (c Coordinate) hash() uint32 {
+	hasher := fnv.New32a()
+	for _, num := range c {
+		hasher.Write([]byte(strconv.Itoa(num)))
 	}
 	return hasher.Sum32()
 }
@@ -81,7 +91,7 @@ func (bg *BaseGrid[T]) AllCoordinates() []Coordinate {
 		}
 		for i := 0; i < bg.Dimensions[dimension]; i++ {
 			current[dimension] = i
-			idx = iter(i, current, dimension + 1)
+			idx = iter(i, current, dimension+1)
 		}
 		return idx
 	}
@@ -119,4 +129,3 @@ func (g *Grid[T]) New() *Grid[T] {
 		GetNeighborCoordinates: g.GetNeighborCoordinates,
 	}
 }
-

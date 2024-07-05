@@ -11,10 +11,6 @@ var gray = color.Gray{Y: 150}
 var white = color.Gray{Y: 225}
 
 func CreateImage(width, height int, data [][]bool) *image.Gray {
-	
-	height = len(data)
-	width = len(data[0])
-
 	img := image.NewGray(image.Rect(0, 0, width, height))
 
 	index := 0

@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-var shardCount = runtime.NumCPU()
+var shardCount = runtime.NumCPU() * 8
 
 // a sharded map to allow for sparse, parallel computation
 //
