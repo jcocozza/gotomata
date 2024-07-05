@@ -74,3 +74,19 @@ func (sm *sparseCellGrid[T]) GetAllKeys() []uint32 {
 
 	return keys
 }
+
+// call a function in parallel on the shards
+func (sm *sparseCellGrid[T]) ProcessShard(f func(shardNum int, shard map[uint32]*Cell[T])) {
+	var wg sync.WaitGroup
+	wg.Add(shardCount)
+
+	for i := 0; i < shardCount; i++ {
+		go func(shard int) {
+			defer wg.Done()
+			sm.mu[shard].RLock()
+			defer sm.mu[shard].RUnlock()
+			f(shard, sm.shards[shard])
+		}(i)
+	}
+	wg.Wait()
+}

@@ -29,3 +29,26 @@ func (ca *CellularAutomata[T]) Step() {
 
 	ca.Grid = newGrid
 }
+
+func (ca *CellularAutomata[T]) Stepp() {
+	newGrid := ca.Grid.New()
+
+	var processer = func(shard int, cells map[uint32]*Cell[T]) {
+		localCellsToCheck := make(CellSet[T])
+		for key, cell := range cells {
+			localCellsToCheck.Add(key, cell)
+			neighbors := ca.Grid.GetNeighbors(cell.Coordinate)
+			for _, neighbor := range neighbors {
+				localCellsToCheck.Add(neighbor.Coordinate.hash(), neighbor)
+			}
+		}
+		for _, cell := range localCellsToCheck {
+			//cellsToCheck.Add(k, v)
+			neighbors := ca.Grid.GetNeighbors(cell.Coordinate)
+			next := ca.RuleSet(cell, neighbors)
+			newGrid.SetCell(next.State, next.Coordinate)
+		}
+	}
+	ca.Grid.Cells.ProcessShard(processer)
+	ca.Grid = newGrid
+}
