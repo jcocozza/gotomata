@@ -21,8 +21,9 @@ func main() {
 	}()
 
 //	conwaymain()
-	randomwalkmain()
+	//randomwalkmain()
 //	elementarymain()
+	seedsmain()
 }
 
 func conwaymain() {
@@ -42,6 +43,27 @@ func conwaymain() {
 		cgol.Stepp()
 		conway.PrintCGOL(cgol)
 //		conway.CGOLToImage(cgol, fmt.Sprintf("images/%d.png", i))
+	}
+}
+
+func seedsmain() {
+	width := 100
+	height := 100
+	steps := 250
+
+	initConfig := []core.Coordinate{
+		{width/2, height/2 - 2}, {width/2, height/2},{width/2, height/2 + 2},
+	}
+	seeds := conway.Seeds(width, height, steps)
+	for _, coord := range initConfig {
+		seeds.Grid.SetCell(true, coord)
+	}
+
+	for i := 0; i < steps; i++ {
+		fmt.Printf("Step: %d/%d\n", i, steps)
+		seeds.Stepp()
+//		conway.PrintCGOL(seeds)
+		conway.CGOLToImage(seeds, fmt.Sprintf("images/%d.png", i))
 	}
 }
 

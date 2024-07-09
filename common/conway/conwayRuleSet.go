@@ -24,3 +24,19 @@ func ConwayRuleSet(cell *core.Cell[bool], neighbors []*core.Cell[bool]) *core.Ce
 	}
 
 }
+
+func SeedsRuleSet(cell *core.Cell[bool], neighbors []*core.Cell[bool]) *core.Cell[bool] {
+	totalLive := 0
+	for _, nb := range neighbors {
+		if nb.State {
+			totalLive += 1
+		}
+	}
+	switch {
+	case totalLive == 2:
+		return &core.Cell[bool]{State: true, Coordinate: cell.Coordinate}
+    default:
+        return &core.Cell[bool]{State: false, Coordinate: cell.Coordinate}
+	}
+
+}

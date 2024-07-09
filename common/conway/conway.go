@@ -19,6 +19,15 @@ func ConwayGameOfLife(width, height, steps int) *core.CellularAutomata[bool] {
 	}
 }
 
+func Seeds(width, height, steps int) *core.CellularAutomata[bool] {
+	grid := ConwayGrid(width, height)
+	return &core.CellularAutomata[bool]{
+		Grid: grid,
+		RuleSet: SeedsRuleSet,
+		Steps: steps,
+	}
+}
+
 func PrintCGOL(cgol *core.CellularAutomata[bool]) {
 	s := ""
 	width := cgol.Grid.Dimensions[0]
