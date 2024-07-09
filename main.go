@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"net/http"
 	_ "net/http/pprof"
 
 	"github.com/jcocozza/gotomata/common/conway"
 	"github.com/jcocozza/gotomata/common/elementary"
+	randomwalk "github.com/jcocozza/gotomata/common/randomWalk"
+	"github.com/jcocozza/gotomata/core"
 )
 
 func main() {
@@ -19,12 +20,14 @@ func main() {
 	}
 	}()
 
-	conwaymain()
+//	conwaymain()
+	randomwalkmain()
+//	elementarymain()
 }
 
 func conwaymain() {
-	width := 1000
-	height := 1000
+	width := 100
+	height := 100
 	steps := 60000
 
 	//initConfig := conway.AcornConfig(width, height)
@@ -37,52 +40,40 @@ func conwaymain() {
 	for i := 0; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		cgol.Stepp()
-		//conway.PrintCGOL(cgol)
+		conway.PrintCGOL(cgol)
 //		conway.CGOLToImage(cgol, fmt.Sprintf("images/%d.png", i))
 	}
 }
 
+func randomwalkmain() {
+	width := 100
+	height := 100
+	steps := 10000
+
+	rw := randomwalk.RandomWalk(width, height, steps)
+	initConfig := []core.Coordinate{{width/2, height/2}}
+	for _, coord := range initConfig {
+		rw.Grid.SetCell(true, coord)
+	}
+
+	initCoord := initConfig[0]
+	for i := 0; i < steps; i++ {
+		fmt.Printf("Step: %d/%d\n", i, steps)
+		initCoord = rw.StepHead(initCoord)
+		randomwalk.RandomWalkToTimage(rw, initCoord, fmt.Sprintf("images/%d.png", i))
+	}
+}
+
 func elementarymain() {
-	//    gLen := 500
-	// one billion cells
-	gLen := 1000000000
-	// one million steps
-	steps := 1000000
-	//steps := 400
-	//gWidth := 500
+	gLen := 100
+	steps := 100
 
 	ecaParr := elementary.ElementaryCellularAutomata(30, gLen, steps)
 	ecaParr.Grid.SetCell(true, []int{gLen / 2})
-	//    elementary.PrintECA(eca)
+	elementary.PrintECA(ecaParr)
 
-	fmt.Println("testing parallel compute speed...")
-	startParr := time.Now()
 	for i := 0; i < steps; i++ {
-		stepStart := time.Now()
 		ecaParr.Stepp()
-		stepEnd := time.Now()
-		totalStep := stepEnd.Sub(stepStart)
-		fmt.Printf("Parallel Step %d/%d completed in: %f\n", i, steps, totalStep.Minutes())
-		//        elementary.PrintECA(eca)
+		elementary.PrintECA(ecaParr)
 	}
-	endParr := time.Now()
-	totalParr := endParr.Sub(startParr)
-
-	fmt.Println("Parallel total time:", totalParr.Seconds())
-
-	ecaLinear := elementary.ElementaryCellularAutomata(30, gLen, steps)
-	ecaLinear.Grid.SetCell(true, []int{gLen / 2})
-	fmt.Println("testing linear compute speed...")
-	startLinear := time.Now()
-	for i := 0; i < steps; i++ {
-		stepStart := time.Now()
-		ecaParr.Step()
-		stepEnd := time.Now()
-		totalStep := stepEnd.Sub(stepStart)
-		fmt.Printf("Linear Step %d/%d completed in: %f\n", i, steps, totalStep.Minutes())
-		//        elementary.PrintECA(eca)
-	}
-	endLinear := time.Now()
-	totalLinear := endLinear.Sub(startLinear)
-	fmt.Println("Linear total time:", totalLinear.Seconds())
 }

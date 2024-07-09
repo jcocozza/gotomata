@@ -33,7 +33,7 @@ func (ca *CellularAutomata[T]) Step() {
 func (ca *CellularAutomata[T]) Stepp() {
 	newGrid := ca.Grid.New()
 
-	var processer = func(shard int, cells map[uint32]*Cell[T]) {
+	var processer = func(shard int, cells map[uint64]*Cell[T]) {
 		localCellsToCheck := make(CellSet[T])
 		for key, cell := range cells {
 			localCellsToCheck.Add(key, cell)
@@ -51,4 +51,17 @@ func (ca *CellularAutomata[T]) Stepp() {
 	}
 	ca.Grid.Cells.ProcessShard(processer)
 	ca.Grid = newGrid
+}
+
+// apply the ruleset only at the passed coordinate
+//
+// returns the coordinate of where the next cell goes
+//
+// this is used to implement random walks (since we only keep track of the most recent coordinate)
+func (ca *CellularAutomata[T]) StepHead(coordinate Coordinate) Coordinate {
+	cell := ca.Grid.GetCell(coordinate)
+	neighbors := ca.Grid.GetNeighbors(coordinate)
+	next := ca.RuleSet(cell, neighbors)
+	ca.Grid.SetCell(next.State, next.Coordinate)
+	return next.Coordinate
 }

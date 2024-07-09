@@ -1,6 +1,9 @@
 package conway
 
-import "github.com/jcocozza/gotomata/core"
+import (
+	"github.com/jcocozza/gotomata/common/grids"
+	"github.com/jcocozza/gotomata/core"
+)
 
 func conwayNeighbors(width, height int) core.GetNeighborsFunc {
 	directions := [][]int{
@@ -37,5 +40,6 @@ func dim2Grid[T comparable](width, height int, defaultState T, neighborFunc core
 }
 
 func ConwayGrid(width, height int) *core.Grid[bool] {
-	return dim2Grid(width, height, false, conwayNeighbors(width, height))
+	return grids.Dim2Grid(width, height, false, conwayNeighbors(width, height))
+	//return dim2Grid(width, height, false, conwayNeighbors(width, height))
 }

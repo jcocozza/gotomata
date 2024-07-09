@@ -1,12 +1,31 @@
 package core
 
 import (
-	"hash/fnv"
-	"strconv"
+	"fmt"
+	//"hash/fnv"
+	//"strconv"
 )
 
 // an n-dimensional coordinate on the grid
 type Coordinate []int
+
+func (c Coordinate) hash() uint64 {
+	var hash uint64 = 14695981039346656037 // FNV offset basis
+	for _, num := range c {
+		hash ^= uint64(num)
+		hash *= 1099511628211 // FNV prime
+	}
+	return hash
+}
+
+/*
+func (c Coordinate) hash() uint32 {
+	hasher := fnv.New32a()
+	for _, num := range c {
+		hasher.Write([]byte(strconv.Itoa(num)))
+	}
+	return hasher.Sum32()
+}
 
 /*
 func (c Coordinate) hash() uint32 {
@@ -18,14 +37,6 @@ func (c Coordinate) hash() uint32 {
 	return hasher.Sum32()
 }
 */
-
-func (c Coordinate) hash() uint32 {
-	hasher := fnv.New32a()
-	for _, num := range c {
-		hasher.Write([]byte(strconv.Itoa(num)))
-	}
-	return hasher.Sum32()
-}
 
 // a cell has a state of type T
 type Cell[T comparable] struct {
@@ -68,7 +79,7 @@ func (bg *BaseGrid[T]) GetCell(coordinate Coordinate) *Cell[T] {
 //
 // ONLY works for existing hashes
 // Will panic if the hash is not in the map
-func (bg *BaseGrid[T]) GetCellByHash(hash uint32) *Cell[T] {
+func (bg *BaseGrid[T]) GetCellByHash(hash uint64) *Cell[T] {
 	if cell, exists := bg.Cells.Get(hash); exists {
 		return cell
 	}
@@ -98,6 +109,16 @@ func (bg *BaseGrid[T]) AllCoordinates() []Coordinate {
 
 	iter(0, make(Coordinate, len(bg.Dimensions)), 0)
 	return coords
+}
+
+func (bg *BaseGrid[T]) CheckIntegrity() {
+	for _, shard := range bg.Cells.shards {
+		for key, cell := range shard {
+			if cell.Coordinate.hash() != key {
+				panic(fmt.Sprintf("Integrity error: cell at key %v has coordinate %v\n", key, cell.Coordinate))
+			}
+		}
+	}
 }
 
 // return all the neighbors of a coordinate
