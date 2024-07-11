@@ -21,8 +21,10 @@ func main() {
 	}
 	}()
 
-	crystalmain()
+	//crystalmain()
 	//conwaymain()
+	//randomwalkmain()
+	elementarymain()
 }
 
 func crystalmain() {
@@ -102,8 +104,8 @@ func randomwalkmain() {
 }
 
 func elementarymain() {
-	gLen := 100
-	steps := 100
+	gLen := 200 
+	steps := 50 
 
 	ecaParr := elementary.ElementaryCellularAutomata(30, gLen, steps)
 	ecaParr.Grid.SetCell(true, []int{gLen / 2})
