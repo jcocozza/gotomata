@@ -32,11 +32,16 @@ func (sm *sparseCellGrid[T]) getShard(key uint32) int {
 	return int(key % uint32(shardCount))
 }
 */
-
+/*
 func (sm *sparseCellGrid[T]) getShard(key uint64) int {
 	    // Use the higher bits for better distribution
 		    return int((key >> 56) % uint64(shardCount))
 		}
+		*/
+
+func (sm *sparseCellGrid[T]) getShard(key uint64) int {
+	    return int(key % uint64(shardCount))
+	}
 
 // Set sets a value in the sharded map
 func (sm *sparseCellGrid[T]) Set(key uint64, value *Cell[T]) {
@@ -96,4 +101,12 @@ func (sm *sparseCellGrid[T]) ProcessShard(f func(shardNum int, shard map[uint64]
 		}(i)
 	}
 	wg.Wait()
+}
+
+func (sm *sparseCellGrid[T]) Size() int {
+	totalLen := 0
+	for _, shard := range sm.shards{
+		totalLen += len(shard)
+	}
+	return totalLen
 }

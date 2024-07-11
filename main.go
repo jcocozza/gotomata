@@ -6,6 +6,7 @@ import (
 	_ "net/http/pprof"
 
 	"github.com/jcocozza/gotomata/common/conway"
+	"github.com/jcocozza/gotomata/common/crystals"
 	"github.com/jcocozza/gotomata/common/elementary"
 	randomwalk "github.com/jcocozza/gotomata/common/randomWalk"
 	"github.com/jcocozza/gotomata/core"
@@ -21,9 +22,26 @@ func main() {
 	}()
 
 //	conwaymain()
-	//randomwalkmain()
-//	elementarymain()
+//	randomwalkmain()
+	//elementarymain()
 	seedsmain()
+//	crystalmain()
+}
+
+func crystalmain() {
+	width := 1000
+	height := 1000
+	steps :=  31
+
+	crystal := crystals.Crystals(width, height, steps)
+	crystal.Grid.SetCell(true, core.Coordinate{0, 0})
+
+	crystals.CrystalToImage(crystal, fmt.Sprintf("images/%d.png", 0))
+	for i := 1; i < steps; i++ {
+		fmt.Printf("Step: %d/%d\n", i, steps)
+		crystal.Stepp()
+		crystals.CrystalToImage(crystal, fmt.Sprintf("images/%d.png", i))
+	}
 }
 
 func conwaymain() {

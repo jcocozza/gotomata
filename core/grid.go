@@ -9,6 +9,7 @@ import (
 // an n-dimensional coordinate on the grid
 type Coordinate []int
 
+/*
 func (c Coordinate) hash() uint64 {
 	var hash uint64 = 14695981039346656037 // FNV offset basis
 	for _, num := range c {
@@ -16,6 +17,31 @@ func (c Coordinate) hash() uint64 {
 		hash *= 1099511628211 // FNV prime
 	}
 	return hash
+}
+*/
+
+func (c Coordinate) hash() uint64 {
+	var hash uint64 = 14695981039346656037 // FNV offset basis
+	for i, num := range c {
+		// Incorporate the index to differentiate [1,2,3] from [3,2,1]
+		hash ^= uint64(i)
+		hash *= 1099511628211 // FNV prime
+		hash ^= uint64(num)
+		hash *= 1099511628211 // FNV prime
+	}
+	return hash
+}
+
+func (c Coordinate) String() string {
+	s := "["
+	for i, v := range c {
+		if i == len(c)-1 {
+			s += fmt.Sprintf("%d", v)
+		} else {
+			s += fmt.Sprintf("%d, ", v)
+		}
+	}
+	return s + "]"
 }
 
 /*
@@ -42,6 +68,10 @@ func (c Coordinate) hash() uint32 {
 type Cell[T comparable] struct {
 	State      T
 	Coordinate Coordinate
+}
+
+func (c *Cell[T]) String() string {
+	return c.Coordinate.String() + fmt.Sprintf(":%v", c.State)
 }
 
 type BaseGrid[T comparable] struct {
@@ -132,10 +162,12 @@ type Grid[T comparable] struct {
 func (g *Grid[T]) GetNeighbors(coord Coordinate) []*Cell[T] {
 	neighbors := []*Cell[T]{}
 	neighborCoords := g.GetNeighborCoordinates(coord)
+//	fmt.Printf("coord: %v pre: %v\n", coord, neighborCoords)
 	for _, co := range neighborCoords {
 		cell := g.GetCell(co)
 		neighbors = append(neighbors, cell)
 	}
+//	fmt.Printf("coord: %v post: %v\n", coord, neighbors)
 	return neighbors
 }
 

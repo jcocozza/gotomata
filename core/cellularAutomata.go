@@ -1,5 +1,7 @@
 package core
 
+//import "fmt"
+
 type CellularAutomata[T comparable] struct {
 	Grid    *Grid[T]
 	RuleSet RuleSet[T]
@@ -43,9 +45,9 @@ func (ca *CellularAutomata[T]) Stepp() {
 			}
 		}
 		for _, cell := range localCellsToCheck {
-			//cellsToCheck.Add(k, v)
 			neighbors := ca.Grid.GetNeighbors(cell.Coordinate)
 			next := ca.RuleSet(cell, neighbors)
+//			fmt.Printf("%v | NBHD: %v\n", cell, neighbors)
 			newGrid.SetCell(next.State, next.Coordinate)
 		}
 	}
