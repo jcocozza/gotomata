@@ -22,8 +22,8 @@ func main() {
 	}()
 
 	//crystalmain()
-	//conwaymain()
-	randomwalkmain()
+	conwaymain()
+	//randomwalkmain()
 	//elementarymain()
 }
 
@@ -44,9 +44,9 @@ func crystalmain() {
 }
 
 func conwaymain() {
-	width := 300
-	height := 300
-	steps := 500
+	width := 200
+	height := 200
+	steps := 1000 
 
 	//initConfig := conway.AcornConfig(width, height)
 	initConfig := conway.AcornConfig(width, height)
