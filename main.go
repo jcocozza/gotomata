@@ -21,16 +21,16 @@ func main() {
 	}
 	}()
 
-	//crystalmain()
-	conwaymain()
+	crystalmain()
+	//conwaymain()
 	//randomwalkmain()
 	//elementarymain()
 }
 
 func crystalmain() {
-	width := 2500
-	height := 2500
-	steps := 320
+	width := 1500 
+	height := 1500 
+	steps := 200 
 
 	crystal := crystals.Crystals(width, height, steps)
 	crystal.Grid.SetCell(true, core.Coordinate{0, 0})
