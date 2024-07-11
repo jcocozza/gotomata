@@ -22,28 +22,29 @@ func main() {
 	}()
 
 	crystalmain()
+	//conwaymain()
 }
 
 func crystalmain() {
-	width := 2500 
+	width := 2500
 	height := 2500
-	steps :=  1000 
+	steps := 320 
 
 	crystal := crystals.Crystals(width, height, steps)
 	crystal.Grid.SetCell(true, core.Coordinate{0, 0})
 
-	crystals.CrystalToImage(crystal, fmt.Sprintf("images/%d.png", 0))
+	crystals.CrystalToImage(crystal, fmt.Sprintf("_images/%d.png", 0))
 	for i := 1; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		crystal.Stepp()
-		crystals.CrystalToImage(crystal, fmt.Sprintf("images/%d.png", i))
+		crystals.CrystalToImage(crystal, fmt.Sprintf("_images/%d.png", i))
 	}
 }
 
 func conwaymain() {
-	width := 100
-	height := 100
-	steps := 60000
+	width := 1000
+	height := 1000
+	steps := 6000
 
 	//initConfig := conway.AcornConfig(width, height)
 	initConfig := conway.AcornConfig(width, height)
@@ -55,8 +56,8 @@ func conwaymain() {
 	for i := 0; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		cgol.Stepp()
-		conway.PrintCGOL(cgol)
-//		conway.CGOLToImage(cgol, fmt.Sprintf("images/%d.png", i))
+//		conway.PrintCGOL(cgol)
+		conway.CGOLToImage(cgol, fmt.Sprintf("_images/%d.png", i))
 	}
 }
 
@@ -77,7 +78,7 @@ func seedsmain() {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		seeds.Stepp()
 //		conway.PrintCGOL(seeds)
-		conway.CGOLToImage(seeds, fmt.Sprintf("images/%d.png", i))
+		conway.CGOLToImage(seeds, fmt.Sprintf("_images/%d.png", i))
 	}
 }
 
@@ -96,7 +97,7 @@ func randomwalkmain() {
 	for i := 0; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		initCoord = rw.StepHead(initCoord)
-		randomwalk.RandomWalkToTimage(rw, initCoord, fmt.Sprintf("images/%d.png", i))
+		randomwalk.RandomWalkToTimage(rw, initCoord, fmt.Sprintf("_images/%d.png", i))
 	}
 }
 

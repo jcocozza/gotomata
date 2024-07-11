@@ -5,6 +5,6 @@ Supports lots of grid types because you define what the coordinates mean.
 Cells also can store arbitrary data allowing for complex automata.
 
 ## Cool Stuff
-![gif](./docs/images/hex-grid-growth-inhibition.gif)
+![mp4](./docs/images/hex-grid-growth-inhibition.mp4)
 
 
