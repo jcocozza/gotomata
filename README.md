@@ -13,4 +13,4 @@ Cells also can store arbitrary data allowing for complex automata.
 ![gif](./docs/images/hex-grid-growth-inhibition.gif)
 
 ### Sample Conway Game of Life
-![mp4](./docs/images/conway-acorn.mp4)
+![gif](./docs/images/conway-acorn.gif)
