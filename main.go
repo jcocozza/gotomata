@@ -28,9 +28,9 @@ func main() {
 }
 
 func crystalmain() {
-	width := 1500 
-	height := 1500 
-	steps := 200 
+	width := 1500
+	height := 1500
+	steps := 200
 
 	crystal := crystals.Crystals(width, height, steps)
 	crystal.Grid.SetCell(true, core.Coordinate{0, 0})
@@ -46,7 +46,7 @@ func crystalmain() {
 func conwaymain() {
 	width := 200
 	height := 200
-	steps := 1000 
+	steps := 1000
 
 	//initConfig := conway.AcornConfig(width, height)
 	initConfig := conway.AcornConfig(width, height)
