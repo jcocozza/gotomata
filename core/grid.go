@@ -1,24 +1,9 @@
 package core
 
-import (
-	"fmt"
-	//"hash/fnv"
-	//"strconv"
-)
+import "fmt"
 
 // an n-dimensional coordinate on the grid
 type Coordinate []int
-
-/*
-func (c Coordinate) hash() uint64 {
-	var hash uint64 = 14695981039346656037 // FNV offset basis
-	for _, num := range c {
-		hash ^= uint64(num)
-		hash *= 1099511628211 // FNV prime
-	}
-	return hash
-}
-*/
 
 func (c Coordinate) hash() uint64 {
 	var hash uint64 = 14695981039346656037 // FNV offset basis
@@ -44,32 +29,13 @@ func (c Coordinate) String() string {
 	return s + "]"
 }
 
-/*
-func (c Coordinate) hash() uint32 {
-	hasher := fnv.New32a()
-	for _, num := range c {
-		hasher.Write([]byte(strconv.Itoa(num)))
-	}
-	return hasher.Sum32()
-}
-
-/*
-func (c Coordinate) hash() uint32 {
-	hasher := fnv.New32a()
-	for _, num := range c {
-		bytes := []byte(fmt.Sprintf("%d", num))
-		hasher.Write(bytes)
-	}
-	return hasher.Sum32()
-}
-*/
-
 // a cell has a state of type T
 type Cell[T comparable] struct {
 	State      T
 	Coordinate Coordinate
 }
 
+// useful for debugging
 func (c *Cell[T]) String() string {
 	return c.Coordinate.String() + fmt.Sprintf(":%v", c.State)
 }
@@ -77,6 +43,13 @@ func (c *Cell[T]) String() string {
 type BaseGrid[T comparable] struct {
 	// a list of dimension sizes
 	// i.e for a 4x4 grid, dimensions = []int{4,4}
+	//
+	// note that you do not necessarily have to specify these
+	// instead, max dims can be calculated via ComputeMaxDims()
+	// these can be used to determine grid sizes
+	//
+	// however, if you want to use a finite grid size and handle boundary conditions
+	// specifing the max dimensions will likely be better
 	Dimensions []int
 	Cells      *sparseCellGrid[T]
 	// must specify default state to work with sparse grids.
@@ -116,9 +89,17 @@ func (bg *BaseGrid[T]) GetCellByHash(hash uint64) *Cell[T] {
 	panic("hash is not in map, something has gone very wrong")
 }
 
-func (bg *BaseGrid[T]) AllCoordinates() []Coordinate {
+// pass in a list of dimensions
+//
+// if the list is nil, use the dimensions specified in BaseGrid
+//
+// this will probably not work with hexagonal grid systems because of negative coordinates
+func (bg *BaseGrid[T]) AllCoordinates(dims []int) []Coordinate {
+	if dims == nil {
+		dims = bg.Dimensions
+	}
 	totalCoords := 1
-	for _, dim := range bg.Dimensions {
+	for _, dim := range dims {
 		totalCoords *= dim
 	}
 	coords := make([]Coordinate, totalCoords)
@@ -141,6 +122,7 @@ func (bg *BaseGrid[T]) AllCoordinates() []Coordinate {
 	return coords
 }
 
+// ensure that each cell coordinate's hash is assigned properly to the key
 func (bg *BaseGrid[T]) CheckIntegrity() {
 	for _, shard := range bg.Cells.shards {
 		for key, cell := range shard {
@@ -151,23 +133,79 @@ func (bg *BaseGrid[T]) CheckIntegrity() {
 	}
 }
 
+// get the maximum value along each axis in the grid (in parallel)
+//
+// can be used to dynamically size output drawings
+func (bg *BaseGrid[T]) ComputeMaxDims() []int {
+	maxForEachShard := make([][]int, len(bg.Cells.shards))
+	var processer = func(shard int, cells map[uint64]*Cell[T]) {
+		var initCell *Cell[T]
+		for key := range cells {
+			initCell = bg.GetCellByHash(key)
+			if initCell != nil {
+				break
+			}
+		}
+
+		// handle case when shard is empty
+		if initCell == nil {
+			maxForEachShard[shard] = nil
+			return
+		}
+
+		max := make([]int, len(initCell.Coordinate))
+		copy(max, initCell.Coordinate)
+
+		for _, cell := range cells {
+			for i, loc := range cell.Coordinate {
+				if max[i] < loc {
+					max[i] = loc
+				}
+			}
+		}
+
+		maxForEachShard[shard] = max
+	}
+	bg.Cells.ProcessShard(processer)
+
+	var s int
+	for _, m := range maxForEachShard {
+		if m != nil {
+			s = len(m)
+		}
+	}
+	// collect all the maxes in each shard to a total max
+	overallMax := make([]int, s)
+	for _, maximum := range maxForEachShard {
+		if maximum == nil {
+			continue
+		}
+		for i, m := range maximum {
+			if overallMax[i] < m {
+				overallMax[i] = m
+			}
+		}
+	}
+	return overallMax
+}
+
 // return all the neighbors of a coordinate
 type GetNeighborsFunc func(coord Coordinate) []Coordinate
 
+// a grid is a set of organized cells with a "geometry" (i.e. a way to get neighbors)
 type Grid[T comparable] struct {
 	*BaseGrid[T]
 	GetNeighborCoordinates GetNeighborsFunc
 }
 
+// Use the neighbor geometry function to get the cell neighbors
 func (g *Grid[T]) GetNeighbors(coord Coordinate) []*Cell[T] {
 	neighbors := []*Cell[T]{}
 	neighborCoords := g.GetNeighborCoordinates(coord)
-//	fmt.Printf("coord: %v pre: %v\n", coord, neighborCoords)
 	for _, co := range neighborCoords {
 		cell := g.GetCell(co)
 		neighbors = append(neighbors, cell)
 	}
-//	fmt.Printf("coord: %v post: %v\n", coord, neighbors)
 	return neighbors
 }
 

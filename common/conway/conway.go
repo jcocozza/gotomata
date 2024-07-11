@@ -33,6 +33,11 @@ func PrintCGOL(cgol *core.CellularAutomata[bool]) {
 	width := cgol.Grid.Dimensions[0]
 	height := cgol.Grid.Dimensions[1]
 
+	dims := cgol.Grid.ComputeMaxDims()
+	testWidth, testHeight := dims[0], dims[1]
+	fmt.Printf("Width: %d, Height: %d\n", width, height)
+	fmt.Printf("Test Width: %d, Test Height: %d\n", testWidth, testHeight)
+
 	for i := 0; i < height; i++ {
 		for j := 0; j < width; j++ {
 			coord := []int{i, j}

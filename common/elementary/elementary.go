@@ -19,7 +19,7 @@ func ElementaryCellularAutomata(rule uint8, length, steps int) *core.CellularAut
 
 func PrintECA(eca *core.CellularAutomata[bool]) {
 	s := ""
-	coords := eca.Grid.AllCoordinates()
+	coords := eca.Grid.AllCoordinates(nil)
 	for _, coord := range coords {
 		cell := eca.Grid.GetCell(coord)
 		if cell.State {

@@ -1,13 +1,12 @@
 package core
 
-//import "fmt"
-
 type CellularAutomata[T comparable] struct {
 	Grid    *Grid[T]
 	RuleSet RuleSet[T]
 	Steps   int
 }
 
+// step not in parallel
 func (ca *CellularAutomata[T]) Step() {
 	cellsToCheck := make(CellSet[T])
 	for _, key := range ca.Grid.Cells.GetAllKeys() {
@@ -32,6 +31,7 @@ func (ca *CellularAutomata[T]) Step() {
 	ca.Grid = newGrid
 }
 
+// step in parallel
 func (ca *CellularAutomata[T]) Stepp() {
 	newGrid := ca.Grid.New()
 
@@ -47,7 +47,6 @@ func (ca *CellularAutomata[T]) Stepp() {
 		for _, cell := range localCellsToCheck {
 			neighbors := ca.Grid.GetNeighbors(cell.Coordinate)
 			next := ca.RuleSet(cell, neighbors)
-//			fmt.Printf("%v | NBHD: %v\n", cell, neighbors)
 			newGrid.SetCell(next.State, next.Coordinate)
 		}
 	}

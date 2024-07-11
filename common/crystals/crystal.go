@@ -1,7 +1,6 @@
 package crystals
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"image/png"
@@ -28,9 +27,6 @@ func CrystalToImage(crystal *core.CellularAutomata[bool], filepath string) *imag
 	width := crystal.Grid.Dimensions[0]
 	height := crystal.Grid.Dimensions[1]
 
-	//width := w * hexSize
-	//height := h * hexSize
-
 	totDraw := 0
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 
@@ -41,9 +37,6 @@ func CrystalToImage(crystal *core.CellularAutomata[bool], filepath string) *imag
 			totDraw++
 		}
 	}
-
-	fmt.Printf("total draw: %d\n", totDraw)
-	fmt.Printf("total calls: %d\n", crystal.Grid.Cells.Size())
 
 	// Save the image to a file
 	file, err := os.Create(filepath)
@@ -59,7 +52,6 @@ func CrystalToImage(crystal *core.CellularAutomata[bool], filepath string) *imag
 
 func drawHex(img *image.RGBA, q, r, width, height int, c color.Color) {
 	centerX, centerY := hexToPixel(q, r, width, height)
-	fmt.Printf("(%d, %d) -> (%d, %d)\n", q, r, centerX, centerY)
 
 	for x := centerX - hexSize; x <= centerX+hexSize; x++ {
 		for y := centerY - hexSize; y <= centerY+hexSize; y++ {
