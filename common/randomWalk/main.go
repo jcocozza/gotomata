@@ -12,6 +12,6 @@ func Main(width, height, steps int, initCoord core.Coordinate) {
 
 	for i := 0; i < steps; i++ {
 		initCoord = rw.StepHead(initCoord)
-		RandomWalkToTimage(rw, initCoord, fmt.Sprintf("images/%d.png", i))
+		RandomWalkToTimage(rw, initCoord, 5, fmt.Sprintf("images/%d.png", i))
 	}
 }

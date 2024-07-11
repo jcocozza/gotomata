@@ -12,3 +12,4 @@ func Dim2Grid[T comparable](width, height int, defaultState T, neighborsFunc cor
 		GetNeighborCoordinates: neighborsFunc,
 	}
 }
+

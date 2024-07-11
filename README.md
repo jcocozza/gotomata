@@ -14,3 +14,6 @@ Cells also can store arbitrary data allowing for complex automata.
 
 ### Sample Conway Game of Life
 ![gif](./docs/images/conway-acorn.gif)
+
+## Random Walk
+![gif](./docs/images/random-walk.gif)

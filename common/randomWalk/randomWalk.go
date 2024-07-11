@@ -41,27 +41,39 @@ func PrintRandomWalk(cgol *core.CellularAutomata[bool]) {
 	}
 }
 
-func RandomWalkToTimage(cgol *core.CellularAutomata[bool], current core.Coordinate, filepath string) *image.Gray {
+func RandomWalkToTimage(cgol *core.CellularAutomata[bool], current core.Coordinate, scale int, filepath string) *image.Gray {
 	var gray = color.Gray{Y: 150}
 	var white = color.Gray{Y: 225}
 
-	width := cgol.Grid.Dimensions[0]
-	height := cgol.Grid.Dimensions[1]
+	width := cgol.Grid.Dimensions[0] * scale
+	height := cgol.Grid.Dimensions[1] * scale
 
 	img := image.NewGray(image.Rect(0, 0, width, height))
 
 	idx := 0
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
+	for y := 0; y < cgol.Grid.Dimensions[1]; y++ {
+		for x := 0; x < cgol.Grid.Dimensions[0]; x++ {
 			coord := []int{y, x}
 			cell := cgol.Grid.GetCell(coord)
 			if coord[0] == current[0] && coord[1] == current[1] {
-				img.Set(y, x, color.RGBA{R: 255, G: 0, B: 0, A: 255})
+				for dy := 0; dy < scale; dy++ {
+					for dx := 0; dx < scale; dx++ {
+						img.Set(x*scale+dx, y*scale+dy, color.RGBA{R: 255, G: 0, B: 0, A: 255})
+					}
+				}
 			} else {
 				if cell.State {
-					img.SetGray(y, x, gray)
+					for dy := 0; dy < scale; dy++ {
+						for dx := 0; dx < scale; dx++ {
+							img.Set(x*scale+dx,y*scale+dy, gray)
+						}
+					}
 				} else {
-					img.SetGray(y, x, white)
+					for dy := 0; dy < scale; dy++ {
+						for dx := 0; dx < scale; dx++ {
+							img.Set(x*scale+dx,y*scale+dy, white)
+						}
+					}
 				}
 			}
 			idx++

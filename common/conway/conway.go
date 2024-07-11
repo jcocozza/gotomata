@@ -1,11 +1,11 @@
 package conway
 
 import (
-	"os"
 	"fmt"
 	"image"
 	"image/color"
 	"image/png"
+	"os"
 
 	"github.com/jcocozza/gotomata/core"
 )
@@ -13,18 +13,18 @@ import (
 func ConwayGameOfLife(width, height, steps int) *core.CellularAutomata[bool] {
 	grid := ConwayGrid(width, height)
 	return &core.CellularAutomata[bool]{
-		Grid: grid,
+		Grid:    grid,
 		RuleSet: ConwayRuleSet,
-		Steps: steps,
+		Steps:   steps,
 	}
 }
 
 func Seeds(width, height, steps int) *core.CellularAutomata[bool] {
 	grid := ConwayGrid(width, height)
 	return &core.CellularAutomata[bool]{
-		Grid: grid,
+		Grid:    grid,
 		RuleSet: SeedsRuleSet,
-		Steps: steps,
+		Steps:   steps,
 	}
 }
 
@@ -41,9 +41,9 @@ func PrintCGOL(cgol *core.CellularAutomata[bool]) {
 	for i := 0; i < height; i++ {
 		for j := 0; j < width; j++ {
 			coord := []int{i, j}
-	//		fmt.Println("getting cell at coord:", coord)
+			//		fmt.Println("getting cell at coord:", coord)
 			cell := cgol.Grid.GetCell(coord)
-//			fmt.Println("cell state: ", cell.State)
+			//			fmt.Println("cell state: ", cell.State)
 			if cell.State {
 				s += "█"
 			} else {
@@ -55,28 +55,31 @@ func PrintCGOL(cgol *core.CellularAutomata[bool]) {
 	}
 }
 
-func CGOLToImage(cgol *core.CellularAutomata[bool], filepath string) *image.Gray {
+func CGOLToImage(cgol *core.CellularAutomata[bool], filepath string, scale int) *image.Gray {
 	var gray = color.Gray{Y: 150}
 	var white = color.Gray{Y: 225}
 
-	width := cgol.Grid.Dimensions[0]
-	height := cgol.Grid.Dimensions[1]
+	width := cgol.Grid.Dimensions[0] * scale
+	height := cgol.Grid.Dimensions[1] * scale
 
-	img := image.NewGray(image.Rect(0,0, width, height))
+	img := image.NewGray(image.Rect(0, 0, width, height))
 
-	idx := 0
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			coord := []int{y,x}
+	for y := 0; y < cgol.Grid.Dimensions[1]; y++ {
+		for x := 0; x < cgol.Grid.Dimensions[0]; x++ {
+			coord := []int{y, x}
 			cell := cgol.Grid.GetCell(coord)
+			color := white
 			if cell.State {
-				img.SetGray(x, y, gray)
-			} else {
-				img.SetGray(x, y, white)
+				color = gray
 			}
-			idx ++
+			for dy := 0; dy < scale; dy++ {
+				for dx := 0; dx < scale; dx++ {
+					img.SetGray(x*scale+dx, y*scale+dy, color)
+				}
+			}
 		}
 	}
+
 	file, err := os.Create(filepath)
 	if err != nil {
 		panic(err)
@@ -88,5 +91,4 @@ func CGOLToImage(cgol *core.CellularAutomata[bool], filepath string) *image.Gray
 		panic(err)
 	}
 	return img
-
 }
