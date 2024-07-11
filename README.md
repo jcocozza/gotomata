@@ -10,6 +10,7 @@ Cells also can store arbitrary data allowing for complex automata.
 ![png](./docs/images/rule-30.png)
 
 ### Hexagonal Growth
-![mp4](./docs/images/hex-grid-growth-inhibition.gif)
+![gif](./docs/images/hex-grid-growth-inhibition.gif)
 
-
+### Sample Conway Game of Life
+![mp4](./docs/images/conway-acorn.mp4)
