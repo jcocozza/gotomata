@@ -1,8 +1,24 @@
 # gotomata
 A parallelized, sparse grid framework for working with cellular automata inspired by Steven Wolfram's _A New Kind Of Science_.
 
-Supports lots of grid types because you define what the coordinates mean.
-Cells also can store arbitrary data allowing for complex automata.
+The three dimensional cellular automata were inspired by the very excellent [softology blog post](https://softologyblog.wordpress.com/2019/12/28/3d-cellular-automata-3/).
+
+## How it works
+
+A grid of cells is sharded based on the number of CPU's your machine has.
+This allows for parallel computation of the next state of the grid based on the specified neighborhood and ruleset functions.
+
+When instantiating a grid, you specify a default state which allows the grid to be sparse.
+Only cells that are not the default state will be stored across the shards.
+
+Just about any grid type is supposed because all a coordinate is, is a list of integers.
+Thus, you define what a coordinate means. For a typical 2 dimensional square grid, this is the standard (x,y) coordinate pair.
+But you can just as easily use hexagonal coordinates (q,r) because neighbors are computed by a user defined function.
+(The geometry of the grid is essentially determined on read)
+
+Thanks to go generics, cells store arbitrary data allowing for complex automata.
+Mostly commonly booleans can be used to store on/off states, but ints can be used to model several states.
+Much more complex states can also be represented using custom structs provided they implement the necessary methods to make the comparable.
 
 ## Cool Stuff
 
