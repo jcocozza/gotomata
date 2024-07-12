@@ -6,6 +6,7 @@ import (
 )
 
 // TODO: figure out how optimize this
+//var shardCount = 1//runtime.NumCPU() * 8
 var shardCount = runtime.NumCPU() * 8
 
 // a sharded map to allow for sparse, parallel computation

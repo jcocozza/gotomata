@@ -6,6 +6,7 @@ import (
 	_ "net/http/pprof"
 
 	"github.com/jcocozza/gotomata/common/conway"
+	"github.com/jcocozza/gotomata/common/crystal3d"
 	"github.com/jcocozza/gotomata/common/crystals"
 	"github.com/jcocozza/gotomata/common/elementary"
 	randomwalk "github.com/jcocozza/gotomata/common/randomWalk"
@@ -14,17 +15,30 @@ import (
 
 func main() {
 	go func() {
-	err := http.ListenAndServe("localhost:6060", nil)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+		err := http.ListenAndServe("localhost:6060", nil)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
 	}()
 
-	crystalmain()
+	crystal3dmain()
+//	amoebamain()
+	//crystalmain()
 	//conwaymain()
 	//randomwalkmain()
 	//elementarymain()
+}
+func crystal3dmain() {
+	width := 300 
+	height := 300
+	depth := 300
+	steps := 10
+	c := crystal3d.Crystal(width, height, depth, steps)
+	c.Grid.SetCell(true, core.Coordinate{width/2, height/2, depth/2})
+	c.Grid.SetCell(true, core.Coordinate{width/2 + 1, height/2, depth/2})
+	c.Grid.SetCell(true, core.Coordinate{width/2 + 2, height/2, depth/2})
+	crystal3d.VisualizeCrystal(c)
 }
 
 func crystalmain() {
@@ -58,7 +72,7 @@ func conwaymain() {
 	for i := 0; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		cgol.Stepp()
-//		conway.PrintCGOL(cgol)
+		//		conway.PrintCGOL(cgol)
 		conway.CGOLToImage(cgol, fmt.Sprintf("_images/%d.png", i), 10)
 	}
 }
@@ -69,7 +83,7 @@ func seedsmain() {
 	steps := 250
 
 	initConfig := []core.Coordinate{
-		{width/2, height/2 - 2}, {width/2, height/2},{width/2, height/2 + 2},
+		{width / 2, height/2 - 2}, {width / 2, height / 2}, {width / 2, height/2 + 2},
 	}
 	seeds := conway.Seeds(width, height, steps)
 	for _, coord := range initConfig {
@@ -79,7 +93,7 @@ func seedsmain() {
 	for i := 0; i < steps; i++ {
 		fmt.Printf("Step: %d/%d\n", i, steps)
 		seeds.Stepp()
-//		conway.PrintCGOL(seeds)
+		//		conway.PrintCGOL(seeds)
 		conway.CGOLToImage(seeds, fmt.Sprintf("_images/%d.png", i), 5)
 	}
 }
@@ -90,7 +104,7 @@ func randomwalkmain() {
 	steps := 10000
 
 	rw := randomwalk.RandomWalk(width, height, steps)
-	initConfig := []core.Coordinate{{width/2, height/2}}
+	initConfig := []core.Coordinate{{width / 2, height / 2}}
 	for _, coord := range initConfig {
 		rw.Grid.SetCell(true, coord)
 	}
