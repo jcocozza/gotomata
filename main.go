@@ -33,7 +33,7 @@ func crystal3dmain() {
 	width := 300 
 	height := 300
 	depth := 300
-	steps := 10
+	steps := 100 
 	c := crystal3d.Crystal(width, height, depth, steps)
 	c.Grid.SetCell(true, core.Coordinate{width/2, height/2, depth/2})
 	c.Grid.SetCell(true, core.Coordinate{width/2 + 1, height/2, depth/2})

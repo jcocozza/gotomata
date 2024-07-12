@@ -2,7 +2,7 @@ package crystal3d
 
 import (
 	"math"
-	"time"
+	//"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/jcocozza/gotomata/core"
@@ -27,33 +27,22 @@ func distanceToColor(distance float64) rl.Color {
 	g := uint8((math.Sin(distance*0.1+2*math.Pi/3) + 1) * 127.5)
 	b := uint8((math.Sin(distance*0.1+4*math.Pi/3) + 1) * 127.5)
 	return rl.NewColor(r, g, b, 255)
-	//return rl.Green
 }
 
-/*
 func DrawCubeCrystal(x, y, z int) {
-	cubePos := rl.NewVector3(float32(x), float32(y), float32(z))
-	blockScale := float32(0.5) // float32((x + y + z)) / 30
-	cubeSize := blockScale     //(15) * blockScale
+	blockScale := float32(0.25)
 
-	distance := math.Sqrt(float64(x*x + y*y + z*z))
-	color := distanceToColor(distance)
-	rl.DrawCube(cubePos, cubeSize, cubeSize, cubeSize, color)
-}
-*/
-
-func DrawCubeCrystal(x, y, z int) {
-	blockScale := float32(0.5)
 	cubePos := rl.NewVector3(float32(x)*blockScale, float32(y)*blockScale, float32(z)*blockScale)
-	cubeSize := blockScale
 
 	distance := math.Sqrt(float64(x*x + y*y + z*z))
 	color := distanceToColor(distance)
-	rl.DrawCube(cubePos, cubeSize, cubeSize, cubeSize, color)
+
+	rl.DrawCubeWires(cubePos, blockScale, blockScale, blockScale, rl.Black)
+	rl.DrawCube(cubePos, blockScale, blockScale, blockScale, color)
 }
 
 func VisualizeCrystal(crystal *core.CellularAutomata[bool]) {
-	screenWidth, screenHeight := int32(1280), int32(720)
+	screenWidth, screenHeight := int32(1280), int32(900)
 
 	shiftX, shiftY, shiftZ := -crystal.Grid.Dimensions[0]/2, -crystal.Grid.Dimensions[1]/2, -crystal.Grid.Dimensions[2]/2
 
@@ -68,14 +57,18 @@ func VisualizeCrystal(crystal *core.CellularAutomata[bool]) {
 
 	rl.SetTargetFPS(60)
 
-	for !rl.WindowShouldClose() {
+	var count int
+	for !rl.WindowShouldClose() && count < crystal.Steps {
 
 		// rotation
-		t := rl.GetTime()
-		camTime := t * 0.3
-		camera.Position.X = float32(math.Cos(camTime)) * 40
-		//		camera.Position.Y = float32(math.Cos(camTime)) * 40
-		camera.Position.Z = float32(math.Sin(camTime)) * 40
+		//t := rl.GetTime()
+		//camTime := t * 0.3
+		////camera.Position.X = float32(math.Cos(camTime)) * 40
+		////camera.Position.Z = float32(math.Sin(camTime)) * 40
+		//targetX := float32(math.Cos(camTime)) * 40
+		//targetZ := float32(math.Sin(camTime)) * 40
+		//camera.Position.X += (targetX - camera.Position.X) * 0.1
+		//camera.Position.Z += (targetZ - camera.Position.Z) * 0.1
 
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
@@ -92,7 +85,8 @@ func VisualizeCrystal(crystal *core.CellularAutomata[bool]) {
 		rl.EndMode3D()
 		rl.DrawFPS(10, 10)
 		rl.EndDrawing()
-		time.Sleep(500 * time.Millisecond) // * time.Second)
+		count++
+		//time.Sleep(500 * time.Millisecond) // * time.Second)
 	}
 	rl.CloseWindow()
 }
