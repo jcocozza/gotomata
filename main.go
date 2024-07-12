@@ -7,6 +7,7 @@ import (
 
 	"github.com/jcocozza/gotomata/common/conway"
 	"github.com/jcocozza/gotomata/common/crystal3d"
+	"github.com/jcocozza/gotomata/common/spikygrowth3d"
 	"github.com/jcocozza/gotomata/common/crystals"
 	"github.com/jcocozza/gotomata/common/elementary"
 	randomwalk "github.com/jcocozza/gotomata/common/randomWalk"
@@ -22,6 +23,7 @@ func main() {
 		}
 	}()
 
+	//spiky3dmain()
 	crystal3dmain()
 //	amoebamain()
 	//crystalmain()
@@ -30,15 +32,32 @@ func main() {
 	//elementarymain()
 }
 func crystal3dmain() {
-	width := 300 
+	width := 300
 	height := 300
 	depth := 300
-	steps := 100 
+	steps := 100
 	c := crystal3d.Crystal(width, height, depth, steps)
 	c.Grid.SetCell(true, core.Coordinate{width/2, height/2, depth/2})
 	c.Grid.SetCell(true, core.Coordinate{width/2 + 1, height/2, depth/2})
 	c.Grid.SetCell(true, core.Coordinate{width/2 + 2, height/2, depth/2})
-	crystal3d.VisualizeCrystal(c)
+	crystal3d.ViewCrytal(c)
+}
+
+func spiky3dmain() {
+	width := 300
+	height := 300
+	depth := 300
+	steps := 100
+	c := spikygrowth3d.Spiky(width, height, depth, steps)
+	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2})
+	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2 + 1})
+	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2 + 2})
+	c.Grid.SetCell(3, core.Coordinate{width/2 + 1, height/2, depth/2})
+	c.Grid.SetCell(3, core.Coordinate{width/2 + 1, height/2, depth/2})
+	c.Grid.SetCell(3, core.Coordinate{width/2, height/2 + 1, depth/2})
+	c.Grid.SetCell(3, core.Coordinate{width/2, height/2 + 2, depth/2})
+
+	spikygrowth3d.ViewSpiky(c)
 }
 
 func crystalmain() {

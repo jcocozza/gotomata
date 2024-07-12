@@ -1,4 +1,4 @@
-package crystal3d 
+package crystal3d
 
 import (
 

@@ -17,3 +17,6 @@ Cells also can store arbitrary data allowing for complex automata.
 
 ## Random Walk
 ![gif](./docs/images/random-walk.gif)
+
+## 3D (Still a work in progress)
+![gif](./docs/images/crystal.gif)
