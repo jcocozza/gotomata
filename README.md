@@ -2,6 +2,9 @@
 A parallelized, sparse grid framework for working with cellular automata inspired by Steven Wolfram's _A New Kind Of Science_.
 
 The three dimensional cellular automata were inspired by the very excellent [softology blog post](https://softologyblog.wordpress.com/2019/12/28/3d-cellular-automata-3/).
+3d rendering of the cellular automata is done here as well.
+I know nothing about rendering and basicially copied the code from [Raylib-go](https://github.com/gen2brain/raylib-go) outright.
+In particular, I used their shaders from the [mesh_instancing](https://github.com/gen2brain/raylib-go/tree/master/examples/shaders/mesh_instancing/glsl330) example.
 
 ## How it works
 
@@ -20,7 +23,7 @@ Thanks to go generics, cells store arbitrary data allowing for complex automata.
 Mostly commonly booleans can be used to store on/off states, but ints can be used to model several states.
 Much more complex states can also be represented using custom structs provided they implement the necessary methods to make the comparable.
 
-## Cool Stuff
+## Visualizations
 
 ### The famous rule 30
 ![png](./docs/images/rule-30.png)
