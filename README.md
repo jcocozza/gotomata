@@ -11,10 +11,10 @@ This allows for parallel computation of the next state of the grid based on the 
 When instantiating a grid, you specify a default state which allows the grid to be sparse.
 Only cells that are not the default state will be stored across the shards.
 
-Just about any grid type is supposed because all a coordinate is, is a list of integers.
+Just about any grid type should be supported because all a coordinate is, is a list of integers.
 Thus, you define what a coordinate means. For a typical 2 dimensional square grid, this is the standard (x,y) coordinate pair.
 But you can just as easily use hexagonal coordinates (q,r) because neighbors are computed by a user defined function.
-(The geometry of the grid is essentially determined on read)
+(The geometry of the grid is essentially determined on read instead of hardcoded)
 
 Thanks to go generics, cells store arbitrary data allowing for complex automata.
 Mostly commonly booleans can be used to store on/off states, but ints can be used to model several states.
