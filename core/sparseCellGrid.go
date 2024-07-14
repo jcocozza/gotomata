@@ -5,11 +5,13 @@ import (
 	"sync"
 )
 
+// TODO: figure out how optimize this
+//var shardCount = 1//runtime.NumCPU() * 8
 var shardCount = runtime.NumCPU() * 8
 
 // a sharded map to allow for sparse, parallel computation
 //
-// each shard supports several readers or one writer
+// per RWMutex each shard supports several readers OR one writer
 type sparseCellGrid[T comparable] struct {
 	shards []map[uint64]*Cell[T]
 	mu     []sync.RWMutex
@@ -27,16 +29,9 @@ func NewSparseCellGrid[T comparable]() *sparseCellGrid[T] {
 }
 
 // getShard returns the index of the shard for the given key
-/*
-func (sm *sparseCellGrid[T]) getShard(key uint32) int {
-	return int(key % uint32(shardCount))
-}
-*/
-
 func (sm *sparseCellGrid[T]) getShard(key uint64) int {
-	    // Use the higher bits for better distribution
-		    return int((key >> 56) % uint64(shardCount))
-		}
+	    return int(key % uint64(shardCount))
+	}
 
 // Set sets a value in the sharded map
 func (sm *sparseCellGrid[T]) Set(key uint64, value *Cell[T]) {
@@ -65,7 +60,7 @@ func (sm *sparseCellGrid[T]) Get(key uint64) (*Cell[T], bool) {
 	return value, ok
 }
 
-// GetAllKeys returns a slice of all keys in the sharded map
+// returns a slice of all keys in the sharded map
 func (sm *sparseCellGrid[T]) GetAllKeys() []uint64 {
 	var keys []uint64
 
@@ -96,4 +91,13 @@ func (sm *sparseCellGrid[T]) ProcessShard(f func(shardNum int, shard map[uint64]
 		}(i)
 	}
 	wg.Wait()
+}
+
+// return the total length of the shards
+func (sm *sparseCellGrid[T]) Size() int {
+	totalLen := 0
+	for _, shard := range sm.shards{
+		totalLen += len(shard)
+	}
+	return totalLen
 }
