@@ -2,17 +2,55 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	_ "net/http/pprof"
 
 	"github.com/jcocozza/gotomata/common/conway"
-	"github.com/jcocozza/gotomata/common/crystal3d"
-	"github.com/jcocozza/gotomata/common/spikygrowth3d"
+	"github.com/jcocozza/gotomata/common/dim3"
+
+	//"github.com/jcocozza/gotomata/common/crystal3d"
 	"github.com/jcocozza/gotomata/common/crystals"
 	"github.com/jcocozza/gotomata/common/elementary"
 	randomwalk "github.com/jcocozza/gotomata/common/randomWalk"
 	"github.com/jcocozza/gotomata/core"
 )
+
+func initSphere(width, height, depth, aliveState int, c *core.CellularAutomata[int]) {
+	radius := 5// Define the radius of the sphere
+	center := core.Coordinate{width / 2, height / 2, depth / 2}
+
+	for x := center[0] - radius; x <= center[0] + radius; x++ {
+		for y := center[1] - radius; y <= center[1] + radius; y++ {
+			for z := center[2] - radius; z <= center[2] + radius; z++ {
+				if (x-center[0])*(x-center[0])+(y-center[1])*(y-center[1])+(z-center[2])*(z-center[2]) <= radius*radius {
+					p := rand.Float64()
+					if p < .3 {
+						c.Grid.SetCell(aliveState, core.Coordinate{x, y, z})
+					}
+				}
+			}
+		}
+	}
+}
+
+func initCube(width, height, depth, aliveState int, c *core.CellularAutomata[int]) {
+	center := core.Coordinate{width / 2, height / 2, depth / 2}
+
+	sideLength := 5// Define the side length of the cube
+
+	halfSide := sideLength / 2
+	for x := center[0] - halfSide; x <= center[0]+halfSide; x++ {
+		for y := center[1] - halfSide; y <= center[1]+halfSide; y++ {
+			for z := center[2] - halfSide; z <= center[2]+halfSide; z++ {
+				p := rand.Float64()
+				if p < .55 {
+					c.Grid.SetCell(aliveState, core.Coordinate{x, y, z})
+				}
+			}
+		}
+	}
+}
 
 func main() {
 	go func() {
@@ -23,41 +61,72 @@ func main() {
 		}
 	}()
 
-	//spiky3dmain()
-	crystal3dmain()
-//	amoebamain()
+	Amoebamain()
+	//r678678main()
+	//r445main()
+	//crystal3dmain()
+	//amoebamain()
 	//crystalmain()
 	//conwaymain()
 	//randomwalkmain()
 	//elementarymain()
 }
+
+func Amoebamain() {
+	width := 3000
+	height := 3000
+	depth := 3000
+	steps := 100
+	c := dim3.Amoeba(width, height, depth, steps)
+	initCube(width, height, depth, 4, c)
+	dim3.VisualizeDim3(c)
+}
+
+func r678678main() {
+	width := 3000
+	height := 3000
+	depth := 3000
+	steps := 100
+	c := dim3.R678678(width, height, depth, steps)
+	initCube(width, height, depth, 3/*alive state*/, c)
+	dim3.VisualizeDim3(c)
+}
+
+func r445main() {
+	width := 3000
+	height := 3000
+	depth := 3000
+	steps := 100
+
+	center := core.Coordinate{width / 2, height / 2, depth / 2}
+	c := dim3.R445(width, height, depth, steps)
+
+	sideLength := 12 // Define the side length of the cube
+
+	halfSide := sideLength / 2
+	for x := center[0] - halfSide; x <= center[0]+halfSide; x++ {
+		for y := center[1] - halfSide; y <= center[1]+halfSide; y++ {
+			for z := center[2] - halfSide; z <= center[2]+halfSide; z++ {
+				p := rand.Float64()
+				if p < .3 {
+					c.Grid.SetCell(4, core.Coordinate{x, y, z})
+				}
+			}
+		}
+	}
+	dim3.VisualizeDim3(c)
+}
+
 func crystal3dmain() {
 	width := 300
 	height := 300
 	depth := 300
 	steps := 100
-	c := crystal3d.Crystal(width, height, depth, steps)
-	c.Grid.SetCell(true, core.Coordinate{width/2, height/2, depth/2})
-	c.Grid.SetCell(true, core.Coordinate{width/2 + 1, height/2, depth/2})
-	c.Grid.SetCell(true, core.Coordinate{width/2 + 2, height/2, depth/2})
-	crystal3d.ViewCrytal(c)
-}
-
-func spiky3dmain() {
-	width := 300
-	height := 300
-	depth := 300
-	steps := 100
-	c := spikygrowth3d.Spiky(width, height, depth, steps)
-	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2})
-	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2 + 1})
-	c.Grid.SetCell(3, core.Coordinate{width/2, height/2, depth/2 + 2})
-	c.Grid.SetCell(3, core.Coordinate{width/2 + 1, height/2, depth/2})
-	c.Grid.SetCell(3, core.Coordinate{width/2 + 1, height/2, depth/2})
-	c.Grid.SetCell(3, core.Coordinate{width/2, height/2 + 1, depth/2})
-	c.Grid.SetCell(3, core.Coordinate{width/2, height/2 + 2, depth/2})
-
-	spikygrowth3d.ViewSpiky(c)
+	c := dim3.Crystal(width, height, depth, steps)
+	c.Grid.SetCell(1, core.Coordinate{width / 2, height / 2, depth / 2})
+	c.Grid.SetCell(1, core.Coordinate{width/2 + 1, height / 2, depth / 2})
+	c.Grid.SetCell(1, core.Coordinate{width/2 + 2, height / 2, depth / 2})
+	dim3.VisualizeDim3(c)
 }
 
 func crystalmain() {

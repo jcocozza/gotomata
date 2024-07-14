@@ -1,4 +1,4 @@
-package dim3
+package dim3viz
 
 import (
 	"fmt"
@@ -57,7 +57,7 @@ func Visualizer[T comparable](ca *core.CellularAutomata[T]) {
 
 	cube := rl.GenMeshCube(1.0, 1.0, 1.0)
 
-	shader := rl.LoadShader("/Users/josephcocozza/Repositories/gotomata/common/grids/dim3/glsl330/base_lighting_instanced.vs", "/Users/josephcocozza/Repositories/gotomata/common/grids/dim3/glsl330/lighting.fs")
+	shader := rl.LoadShader("/Users/josephcocozza/Repositories/gotomata/common/grids/dim3viz/glsl330/base_lighting_instanced.vs", "/Users/josephcocozza/Repositories/gotomata/common/grids/dim3viz/glsl330/lighting.fs")
 	shader.UpdateLocation(rl.ShaderLocMatrixMvp, rl.GetShaderLocation(shader, "mvp"))
 	shader.UpdateLocation(rl.ShaderLocVectorView, rl.GetShaderLocation(shader, "viewPos"))
 	shader.UpdateLocation(rl.ShaderLocMatrixModel, rl.GetShaderLocationAttrib(shader, "instanceTransform"))
@@ -80,6 +80,8 @@ func Visualizer[T comparable](ca *core.CellularAutomata[T]) {
 			[]float32{camera.Position.X, camera.Position.Y, camera.Position.Z}, rl.ShaderUniformVec3)
 
 		rl.UpdateCamera(&camera, rl.CameraOrbital) // Update camera with orbital camera mode
+		//rl.UpdateCamera(&camera, rl.CameraFree)
+
 
 		rl.BeginDrawing()
 		{
@@ -88,11 +90,16 @@ func Visualizer[T comparable](ca *core.CellularAutomata[T]) {
 
 			size := ca.Grid.Cells.Size()
 			translations := computeTranslations(ca)
-			rl.DrawMeshInstanced(cube, material, translations, size)
+			if len(translations) > 0 {
+				rl.DrawMeshInstanced(cube, material, translations, size)
+			}
 			rl.EndMode3D()
 			rl.DrawFPS(10,10)
 			rl.DrawText(fmt.Sprintf("Step: %d", step), 490, 10, 20, rl.Maroon)
-			if step < 63 {
+				if step == 0 {
+					time.Sleep(2 * time.Second)
+				}
+			if step < ca.Steps {
 				ca.Stepp()
 				step++
 			}

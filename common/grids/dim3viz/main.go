@@ -1,4 +1,4 @@
-package dim3 
+package dim3viz
 
 import (
 	"fmt"
