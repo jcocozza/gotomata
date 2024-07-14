@@ -1,6 +1,9 @@
 package elementary
 
-import "github.com/jcocozza/gotomata/core"
+import (
+	"github.com/jcocozza/gotomata/common/grids"
+	"github.com/jcocozza/gotomata/core"
+)
 
 func elementaryNeighbors(length int) core.GetNeighborsFunc {
 	nf := func(coord core.Coordinate) []core.Coordinate {
@@ -11,13 +14,6 @@ func elementaryNeighbors(length int) core.GetNeighborsFunc {
 	return nf
 }
 
-func Dim1Grid[T comparable](length int, defaultState T) *core.Grid[T] {
-	return &core.Grid[T]{
-		BaseGrid: &core.BaseGrid[T]{
-			Dimensions:   []int{length},
-			Cells:        core.NewSparseCellGrid[T](),
-			DefaultState: defaultState,
-		},
-		GetNeighborCoordinates: elementaryNeighbors(length),
-	}
+func ElementaryGrid(length int) *core.Grid[bool] {
+	return grids.Dim1Grid(length, false, elementaryNeighbors(length))
 }

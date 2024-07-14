@@ -7,7 +7,7 @@ import (
 )
 
 func ElementaryCellularAutomata(rule uint8, length, steps int) *core.CellularAutomata[bool] {
-	grid := Dim1Grid(length, false)
+	grid := ElementaryGrid(length)
 	ruleset := ElementaryRuleSet(rule)
 
 	return &core.CellularAutomata[bool]{
