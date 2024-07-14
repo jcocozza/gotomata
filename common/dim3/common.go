@@ -6,15 +6,6 @@ import (
 	"github.com/jcocozza/gotomata/core"
 )
 
-func A(x,y,z int) *core.Grid[int] {
-	return grids.Dim3Grid(x,y,z, 0, dim3NeighborsMoore(x,y,z))
-}
-
-func Ao(x,y,z int) *core.Grid[int] {
-	return grids.Dim3Grid(x,y,z, 0, dim3NeighborsVN(x,y,z))
-}
-
-
 func Crystal(width, height, depth, steps int) *core.CellularAutomata[int] {
 	grid := grids.Dim3Grid(width, height, depth, 0, dim3NeighborsVN(width, height, depth))
 	return &core.CellularAutomata[int] {

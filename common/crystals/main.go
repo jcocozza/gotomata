@@ -6,7 +6,9 @@ import (
 	"github.com/jcocozza/gotomata/core"
 )
 
-func Main(width, height, steps int, initConfig []core.Coordinate) {
+var CenterConfig []core.Coordinate = []core.Coordinate{{0,0}}
+
+func MainCrystal(width, height, steps int, initConfig []core.Coordinate) {
 	crystal := Crystals(width, height, steps)
 	for _, coord := range initConfig {
 		crystal.Grid.SetCell(true, coord)

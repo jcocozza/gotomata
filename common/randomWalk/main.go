@@ -6,8 +6,9 @@ import (
 	"github.com/jcocozza/gotomata/core"
 )
 
-func Main(width, height, steps int, initCoord core.Coordinate) {
+func MainRandomWalk(width, height, steps int) {
 	rw := RandomWalk(width, height, steps)
+	initCoord := core.Coordinate{width/2, height/2}
 	rw.Grid.SetCell(true, initCoord)
 
 	for i := 0; i < steps; i++ {
