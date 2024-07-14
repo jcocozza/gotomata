@@ -10,9 +10,9 @@ func (c Coordinate) hash() uint64 {
 	for i, num := range c {
 		// Incorporate the index to differentiate [1,2,3] from [3,2,1]
 		hash ^= uint64(i)
-		hash *= 1099511628211 // FNV prime
+		hash *= 1099511628211
 		hash ^= uint64(num)
-		hash *= 1099511628211 // FNV prime
+		hash *= 1099511628211
 	}
 	return hash
 }
