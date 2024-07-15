@@ -28,8 +28,8 @@ Much more complex states can also be represented using custom structs provided t
 ### The famous rule 30
 ![png](./docs/images/rule-30.png)
 
-### Continious Cellular Automata
-![png](./docs/images/continious.png)
+### Continuous Cellular Automata
+![png](/docs/images/continuous.png)
 
 ### Hexagonal Growth
 ![gif](./docs/images/hex-grid-growth-inhibition.gif)

@@ -1,4 +1,4 @@
-package continious
+package continuous
 
 import (
 	"image"
@@ -57,7 +57,7 @@ var KeepFractionalPartRuleSet = func(cell *core.Cell[float64], neighbors []*core
 	}
 }
 
-func ContiniousCellularAutomata(length, steps int) *core.CellularAutomata[float64] {
+func ContinuousCellularAutomata(length, steps int) *core.CellularAutomata[float64] {
 	g := grid(length)
 	return &core.CellularAutomata[float64]{
 		Grid:    g,
@@ -70,20 +70,20 @@ func SetCenterConfig(length int) []core.Coordinate {
 	return []core.Coordinate{{length / 2}}
 }
 
-func MainContinious(length, steps, scale int, initConfig []core.Coordinate) {
-	ca := ContiniousCellularAutomata(length, steps)
+func MainContinuous(length, steps, scale int, initConfig []core.Coordinate) {
+	ca := ContinuousCellularAutomata(length, steps)
 	for _, coord := range initConfig {
 		ca.Grid.SetCell(1, coord)
 	}
 	img := image.NewGray(image.Rect(0, 0, length*scale, steps*scale))
-	AddContiniousToImage(ca, img, 0, scale, length)
+	AddContinuousToImage(ca, img, 0, scale, length)
 	for i := 0; i < steps; i++ {
 		ca.Stepp()
 		if i < steps {
-			AddContiniousToImage(ca, img, i+1, scale, length)
+			AddContinuousToImage(ca, img, i+1, scale, length)
 		}
 	}
-	utils.WritePNG(img, "_images/continious.png")
+	utils.WritePNG(img, "_images/continuous.png")
 }
 
 func stateToColor(state float64) color.RGBA {
@@ -91,7 +91,7 @@ func stateToColor(state float64) color.RGBA {
 	return color.RGBA{R: gray, G: gray, B: gray, A: 255}
 }
 
-func AddContiniousToImage(ca *core.CellularAutomata[float64], img *image.Gray, stepNum, scale, length int) {
+func AddContinuousToImage(ca *core.CellularAutomata[float64], img *image.Gray, stepNum, scale, length int) {
 	coords := ca.Grid.AllCoordinates(nil)
 	for i, coord := range coords {
 		cell := ca.Grid.GetCell(coord)

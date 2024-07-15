@@ -5,7 +5,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 
-	"github.com/jcocozza/gotomata/common/continious"
+	"github.com/jcocozza/gotomata/common/continuous"
 //	"github.com/jcocozza/gotomata/common/elementary"
 )
 
@@ -29,6 +29,6 @@ func main() {
 	//initCfg := elementary.SetCenterConfig(width)
 	//elementary.MainElementary(30, width, steps, initCfg)
 
-	initCfg2 := continious.SetCenterConfig(width)
-	continious.MainContinious(width, steps, 10, initCfg2)
+	initCfg2 := continuous.SetCenterConfig(width)
+	continuous.MainContinuous(width, steps, 10, initCfg2)
 }
