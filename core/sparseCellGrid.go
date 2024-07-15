@@ -61,6 +61,8 @@ func (sm *sparseCellGrid[T]) Get(key uint64) (*Cell[T], bool) {
 }
 
 // returns a slice of all keys in the sharded map
+//
+// Note: there is no ordering here
 func (sm *sparseCellGrid[T]) GetAllKeys() []uint64 {
 	var keys []uint64
 
