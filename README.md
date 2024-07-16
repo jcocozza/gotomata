@@ -34,6 +34,8 @@ Much more complex states can also be represented using custom structs provided t
 ### 1D 3 Color Totalistic Cellular Automata
 ![png](./docs/images/totalistic-rule-912.png)
 
+![png](./docs/images/totalistic-rule-1635.png)
+
 ### Hexagonal Growth
 ![gif](./docs/images/hex-grid-growth-inhibition.gif)
 

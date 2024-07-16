@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	width  = 300
+	width  = 2000 
 	height = 300
 	depth  = 300
-	steps  = 300
+	steps  = 4000 
 )
 
 func main() {
@@ -34,5 +34,5 @@ func main() {
 	//continuous.MainContinuous(width, steps, 10, initCfg2)
 
 	initCfg := totalistic.SetCenterConfig(width)
-	totalistic.MainTotalistic(912, width, steps, 10, initCfg)
+	totalistic.MainTotalistic(1635, width, steps, 1, initCfg)
 }
