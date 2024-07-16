@@ -29,7 +29,10 @@ Much more complex states can also be represented using custom structs provided t
 ![png](./docs/images/rule-30.png)
 
 ### Continuous Cellular Automata
-![png](/docs/images/continuous.png)
+![png](./docs/images/continuous.png)
+
+### 1D 3 Color Totalistic Cellular Automata
+![png](./docs/images/totalistic-rule-912.png)
 
 ### Hexagonal Growth
 ![gif](./docs/images/hex-grid-growth-inhibition.gif)
