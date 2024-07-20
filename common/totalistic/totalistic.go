@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"math/rand"
 
 	"github.com/jcocozza/gotomata/common/grids"
 	"github.com/jcocozza/gotomata/core"
@@ -124,11 +125,20 @@ func SetCenterConfig(length int) []core.Coordinate{
 	return []core.Coordinate{{length / 2}}
 }
 
+func SetRandomConfig(length int) []core.Coordinate {
+	initState := []core.Coordinate{}
+	for i := 0; i < length; i++ {
+		p := rand.Float64()
+		if p > .5 {
+			initState = append(initState, core.Coordinate{i})
+		}
+	}
+	return initState
+}
+
 func MainTotalistic(ruleNum, length, steps, scale int, initConfig []core.Coordinate) {
 	ca := TotalisticCellularAutomata(ruleNum, length, steps)
-	for _, coord := range initConfig {
-		ca.Grid.SetCell(1, coord)
-	}
+	ca.Grid.SetConfig(initConfig, 1)
 	img := image.NewGray(image.Rect(0,0, length * scale, steps * scale))
 	AddTotalisticToImage(ca, img, 0, scale, length)
 	for i := 0; i < steps; i++ {

@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"math/rand"
 
 	"github.com/jcocozza/gotomata/common/grids"
 	"github.com/jcocozza/gotomata/core"
@@ -68,6 +69,17 @@ func ContinuousCellularAutomata(length, steps int) *core.CellularAutomata[float6
 
 func SetCenterConfig(length int) []core.Coordinate {
 	return []core.Coordinate{{length / 2}}
+}
+
+func SetRandomConfig(length int) []core.Coordinate {
+	initState := []core.Coordinate{}
+	for i := 0; i < length; i++ {
+		p :=  rand.Float64()
+		if p > .5 {
+			initState = append(initState, core.Coordinate{i})
+		}
+	}
+	return initState
 }
 
 func MainContinuous(length, steps, scale int, initConfig []core.Coordinate) {

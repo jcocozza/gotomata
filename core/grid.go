@@ -68,6 +68,13 @@ func (bg *BaseGrid[T]) SetCell(state T, coordinate Coordinate) {
 	}
 }
 
+// set a list of coordinates to the passed state
+func (bg *BaseGrid[T]) SetConfig(cfg []Coordinate, state T) {
+	for _, coord := range cfg {
+		bg.SetCell(state, coord)
+	}
+}
+
 // If the coordinate exists in the map, return it
 //
 // otherwise return a cell with the base state
