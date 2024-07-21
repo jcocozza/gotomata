@@ -23,6 +23,15 @@ Thanks to go generics, cells store arbitrary data allowing for complex automata.
 Mostly commonly booleans can be used to store on/off states, but ints can be used to model several states.
 Much more complex states can also be represented using custom structs provided they implement the necessary methods to make the comparable.
 
+## Sample Usage
+I recommend checking out the [1-d continuous](./common/continuous/continuous.go) as an example of some implementation.
+(Hopefully this will be easier to implement later, for now things are internally exposed)
+Then you can run it with:
+```go
+initCfg := continious.SetRandomConfig(width)
+continious.MainContinious(width, steps, 10, initCfg)
+```
+
 ## Visualizations
 
 ### The famous rule 30
