@@ -1,5 +1,5 @@
 # gotomata
-A parallelized, sparse grid framework for working with cellular automata inspired by Steven Wolfram's _A New Kind Of Science_.
+A concurrent, sparse grid framework for working with cellular automata inspired by Steven Wolfram's _A New Kind Of Science_.
 
 The three dimensional cellular automata were inspired by the very excellent [softology blog post](https://softologyblog.wordpress.com/2019/12/28/3d-cellular-automata-3/).
 3d rendering of the cellular automata is done here as well.
